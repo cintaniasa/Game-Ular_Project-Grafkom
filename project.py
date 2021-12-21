@@ -77,11 +77,11 @@ def make_new_dot(food):
     global score
     if food != None:
         food = None
-    dotX = random.randint(-100,100)
-    dotY = random.randint(-100,100)
+    dotX = random.randint(-120,120)
+    dotY = random.randint(-120,120)
     food = makanan(dotX,dotY)
     if ((posisi_ular[0]>=dotX-10 and posisi_ular[0]<=dotX) and (posisi_ular[1] <=dotY and posisi_ular[1] >=dotY-10)):
-        score += 10
+        score += 1
         make_new_dot(food)
     
 # Fungsi Iterasi    
@@ -110,7 +110,7 @@ def showScreen():
     if state=='start':
         ular.gabung(posisi_ular[0],posisi_ular[1])
         bentuk()
-        drawText('SCORE : '+ score, -80,-300,255,0,255)
+        drawText('SCORE : '+ str(score), -80,-300,255,0,255)
         make_new_dot(food)
         game_over(400,-400,-400,-310)
         game_over(400,310,-400,400)
