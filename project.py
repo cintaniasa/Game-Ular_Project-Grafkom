@@ -19,6 +19,7 @@ gerakKanan=True
 
 state='start'
 food = None
+score = 0
 
 # Fungsi menggunakan objek kotak
 def bentuk():
@@ -62,18 +63,26 @@ def game_over(atas,bawah,kiri,kanan):
         state='gameover'
 
  # Random makanan ular (tantangan)
-def lingkaran(x,y):
-    glColor3f(255,0,255)
-    Circle_polygon(x -18.00,y+ 4.00,10.00,100.00)
+def makanan(x,y):
+    glBegin(GL_QUADS) 
+    glColor3ub(237, 240, 245)
+    glVertex2f(x,y) #a
+    glVertex2f(x,y-10) #b
+    glVertex2f(x-10,y-10) #c
+    glVertex2f(x-10,y) #d
     glEnd()
-def make_new_dot(self):
-    global state
+
+def make_new_dot(food):
+    global posisi_ular
+    global score
     if food != None:
-        self.canvas.delete(food)
         food = None
-    dotX = random.randint(-800,800)
-    dotY = random.randint(-800,800)
-    food = lingkaran(dotX,dotY)
+    dotX = random.randint(-100,100)
+    dotY = random.randint(-100,100)
+    food = makanan(dotX,dotY)
+    if ((posisi_ular[0]>=dotX-10 and posisi_ular[0]<=dotX) and (posisi_ular[1] <=dotY and posisi_ular[1] >=dotY-10)):
+        score += 10
+        make_new_dot(food)
     
 # Fungsi Iterasi    
 def iterate():
@@ -101,6 +110,8 @@ def showScreen():
     if state=='start':
         ular.gabung(posisi_ular[0],posisi_ular[1])
         bentuk()
+        drawText('SCORE : '+ score, -80,-300,255,0,255)
+        make_new_dot(food)
         game_over(400,-400,-400,-310)
         game_over(400,310,-400,400)
         game_over(400,-400,310,400)
