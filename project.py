@@ -5,6 +5,7 @@ import OpenGL.GLUT
 import OpenGL.GLU
 import ular
 import random
+import os.path
 
 from OpenGL.GL import *
 from OpenGL.GLUT import *
@@ -20,6 +21,12 @@ gerakKanan=True
 state='start'
 food = None
 score = 0
+if (os.path.isfile("high_score.txt")):
+    scoreFile = open("high_score.txt")
+    high_score = int(scoreFile.read())
+    scoreFile.close()
+else:
+    high_score = 0
 
 # Fungsi menggunakan objek kotak
 def bentuk():
@@ -59,8 +66,15 @@ def bentuk():
 # Fungsi untuk mengkonfigurasi tulisan yang berada pada akhir stage atau tiap level
 def game_over(atas,bawah,kiri,kanan):
     global state
+    global score
+    global high_score
     if ((posisi_ular[0]<=kanan and posisi_ular[0] >=kiri) and (posisi_ular[1] <=atas and posisi_ular[1] >=bawah)):
         state='gameover'
+    if score > high_score:
+            scoreFile = open("high_score.txt", "w")
+            scoreFile.write(str(score))
+            scoreFile.close()
+            drawText('Selamat! Kamu mendapatkan score tertinggi',-200,-50,255, 0,0)
 
  # Random makanan ular (tantangan)
 def makanan(x,y):
@@ -110,7 +124,8 @@ def showScreen():
     if state=='start':
         ular.gabung(posisi_ular[0],posisi_ular[1])
         bentuk()
-        drawText('SCORE : '+ str(score), -80,-300,255,0,255)
+        drawText('SCORE : '+ str(score), -200,-300,255,0,255)
+        drawText('HIGH SCORE : '+ str(high_score), 100,-300,255,0,255)
         make_new_dot(food)
         game_over(400,-400,-400,-310)
         game_over(400,310,-400,400)
